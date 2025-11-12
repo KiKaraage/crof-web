@@ -1,5 +1,8 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import { UserMenu } from "@/components/UserMenu";
+import { Button } from "./components/ui/button";
+import { useState } from "react";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { PricingPage } from "@/pages/PricingPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
 import { StartupPage } from "@/pages/StartupPage";
