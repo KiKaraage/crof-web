@@ -11,6 +11,7 @@ import { SignUpPage } from "@/pages/SignUpPage";
 import { PlaygroundPage } from "@/pages/PlaygroundPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { SettingsPage } from "@/pages/SettingsPage";
+import { DocsPage } from "@/pages/DocsPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 function Footer() {
