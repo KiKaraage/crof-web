@@ -12,21 +12,21 @@ import { NotFoundPage } from "@/pages/NotFoundPage";
 
 function Footer() {
   return (
-    <footer className="w-full border-t bg-background">
+    <footer className="w-full bg-background">
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center justify-between">
           {/* Left */}
           <div>
-            <Link to="/" className="text-lg font-semibold hover:text-primary transition-colors">
+            <Link to="/" className="text-lg font-semibold gradient-text">
               crofAI
             </Link>
           </div>
           
           {/* Center */}
           <div className="flex items-center gap-6">
-            <Link to="/pricing" className="text-sm hover:text-primary transition-colors">Models</Link>
-            <Link to="/privacy" className="text-sm hover:text-primary transition-colors">Privacy</Link>
-            <Link to="/startup" className="text-sm hover:text-primary transition-colors">Startup</Link>
+            <Link to="/pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Models</Link>
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Privacy</Link>
+            <Link to="/startup" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Startup</Link>
           </div>
           
           {/* Right */}
@@ -41,12 +41,12 @@ function Footer() {
 
 export function App() {
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col bg-background">
       <main className="flex-1">
         <Routes>
           <Route path="/" element={
             <div className="h-full flex items-center justify-center">
-              <h1 className="text-3xl font-bold">Welcome</h1>
+              <h1 className="text-3xl font-bold gradient-text">Welcome</h1>
             </div>
           } />
           <Route path="/pricing" element={<PricingPage />} />
