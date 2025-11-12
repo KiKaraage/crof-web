@@ -33,6 +33,23 @@ function Footer() {
           <div>
             <UserMenu />
           </div>
+        {/* Center */}
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-6">
+          <Link to="/pricing" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-18 text-center ${location.pathname === '/pricing' ? 'font-bold text-white' : ''}`}>Models</Link>
+          <Link to="/docs" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-26 text-center ${location.pathname === '/docs' ? 'font-bold text-white' : ''}`}>Documentation</Link>
+          {!isLoggedIn ? (
+            <>
+              <Link to="/privacy" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-18 text-center ${location.pathname === '/privacy' ? 'font-bold text-white' : ''}`}>Privacy</Link>
+              <Link to="/startup" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-18 text-center ${location.pathname === '/startup' ? 'font-bold text-white' : ''}`}>For Startups</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/playground" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-22 text-center ${location.pathname === '/playground' ? 'font-bold text-white' : ''}`}>Playground</Link>
+              <Link to="/dashboard" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-22 text-center ${location.pathname === '/dashboard' ? 'font-bold text-white' : ''}`}>Dashboard</Link>
+              <Link to="/settings" className={`text-sm text-muted-foreground hover:text-foreground transition-colors w-18 text-center ${location.pathname === '/settings' ? 'font-bold text-white' : ''}`}>Settings</Link>
+            </>
+          )}
+        </div>
         </div>
       </div>
     </footer>
