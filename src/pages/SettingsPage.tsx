@@ -1,9 +1,11 @@
 export function SettingsPage() {
   return (
-    <div className="h-full flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-4 gradient-text">Settings</h1>
-        <p className="text-muted-foreground">Manage your account settings</p>
+    <div className="px-8 pt-9 pb-0 h-full">
+      <div className="container mx-auto max-w-4xl rounded-md h-full flex items-center justify-center relative">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4 gradient-text">Settings</h1>
+          <p className="text-muted-foreground">Manage your account settings</p>
+        </div>
       </div>
     </div>
   );
