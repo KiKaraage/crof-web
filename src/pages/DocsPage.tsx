@@ -82,4 +82,3 @@ for chunk in response:
   );
 }
 
-export default DocsPage;
