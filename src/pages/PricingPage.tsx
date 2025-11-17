@@ -1,5 +1,5 @@
-import { Copy, Check } from "lucide-react"
 import { useState, useMemo } from "react"
+import { Copy, Check, ArrowUpDown, X, Filter, Zap, DollarSign, ChevronDown } from "lucide-react"
 import {
   flexRender,
   getCoreRowModel,
@@ -16,6 +16,14 @@ import type {
 } from "@tanstack/react-table"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
+import { Checkbox } from "../components/ui/checkbox"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../components/ui/dropdown-menu"
+import { Input } from "../components/ui/input"
 import {
   Table,
   TableBody,
@@ -318,6 +326,12 @@ export function PricingPage() {
   const [copiedModel, setCopiedModel] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [showModal, setShowModal] = useState(false)
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState({})
+  const [providerFilter, setProviderFilter] = useState<string>("")
+   const [sortMode, setSortMode] = useState<'default' | 'model-asc' | 'model-desc' | 'speed-fastest' | 'speed-slowest' | 'price-cheapest' | 'price-expensive'>('default')
 
   const copyModelId = async (modelId: string) => {
     try {
@@ -373,6 +387,138 @@ export function PricingPage() {
     const providers = models.map(model => getProviderName(model.id))
     return [...new Set(providers)].sort()
   }, [models])
+
+  const columns: ColumnDef<Model>[] = [
+    {
+      accessorKey: "id",
+      header: () => <div className="font-bold">Model</div>,
+      cell: ({ row }) => {
+        const model = row.original
+        return (
+          <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm">{model.id}</span>
+                            {(model.id.includes('free') || (model.pricing.prompt === 0 && model.pricing.completion === 0)) && (
+                              <span className="px-1.5 py-0.5 text-xs font-medium bg-green-500/20 text-green-400 rounded">Free</span>
+                            )}
+                            {model.id.includes('turbo') && (
+                              <span className="px-1.5 py-0.5 text-xs font-medium bg-blue-500/20 text-blue-400 rounded">Turbo</span>
+                            )}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 flex-shrink-0"
+                onClick={() => copyModelId(model.id)}
+              >
+                {copiedModel === model.id ? (
+                  <Check className="h-3 w-3" />
+                ) : (
+                  <Copy className="h-3 w-3" />
+                )}
+              </Button>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <div className="md:hidden">
+                <span className="font-medium">Quant:</span> {model.quantization} •
+                <span className="font-medium"> Context:</span> {formatNumber(model.context_length)} / {formatNumber(model.max_completion_tokens)}
+              </div>
+              <div className="hidden md:block">
+                {model.quantization} • {formatNumber(model.context_length)} / {formatNumber(model.max_completion_tokens)}
+              </div>
+            </div>
+          </div>
+        )
+      },
+    },
+    {
+      accessorKey: "pricing.prompt",
+      header: () => <div className="text-center font-bold">$ / M in</div>,
+    cell: ({ row }) => {
+      const amount = row.original.pricing.prompt
+      return <div className="text-center text-sm font-bold">${amount.toFixed(2)}</div>
+    },
+    },
+    {
+      accessorKey: "pricing.completion",
+      header: () => <div className="text-center font-bold">$ / M out</div>,
+    cell: ({ row }) => {
+      const amount = row.original.pricing.completion
+      return <div className="text-center text-sm font-bold">${amount.toFixed(2)}</div>
+    },
+    },
+    {
+      accessorKey: "speed",
+      header: () => <div className="text-center font-bold">Speed</div>,
+      cell: ({ row }) => {
+        const speed = row.original.speed
+        return (
+          <div className={`text-center text-sm ${getSpeedColor(speed)}`}>
+            ~{speed} t/s
+          </div>
+        )
+      },
+    },
+  ]
+
+  const filteredModels = useMemo(() => {
+    let filtered
+    if (!providerFilter) {
+      filtered = models
+    } else if (providerFilter === "Free") {
+      filtered = models.filter(model => model.pricing.prompt === 0 && model.pricing.completion === 0)
+    } else if (providerFilter === "Best Speed") {
+      filtered = models.filter(model => model.speed > 99)
+    } else {
+      filtered = models.filter(model => getProviderName(model.id) === providerFilter)
+    }
+
+    // Apply sorting based on sort mode
+    if (sortMode === 'model-asc') {
+      filtered = [...filtered].sort((a, b) => a.id.localeCompare(b.id))
+    } else if (sortMode === 'model-desc') {
+      filtered = [...filtered].sort((a, b) => b.id.localeCompare(a.id))
+    } else if (sortMode === 'speed-fastest') {
+      filtered = [...filtered].sort((a, b) => b.speed - a.speed)
+    } else if (sortMode === 'speed-slowest') {
+      filtered = [...filtered].sort((a, b) => a.speed - b.speed)
+     } else if (sortMode === 'price-cheapest') {
+       filtered = [...filtered].sort((a, b) => {
+         if (a.pricing.completion !== b.pricing.completion) {
+           return a.pricing.completion - b.pricing.completion
+         }
+         return a.pricing.prompt - b.pricing.prompt
+       })
+     } else if (sortMode === 'price-expensive') {
+       filtered = [...filtered].sort((a, b) => {
+         if (a.pricing.completion !== b.pricing.completion) {
+           return b.pricing.completion - a.pricing.completion
+         }
+         return b.pricing.prompt - a.pricing.prompt
+       })
+    }
+    // 'default' keeps original order
+
+    return filtered
+  }, [models, providerFilter, sortMode])
+
+  const table = useReactTable({
+    data: filteredModels,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  })
+
   return (
     <div className="px-8 pt-9 pb-0 h-full">
       <div className="container mx-auto max-w-6xl">
@@ -380,7 +526,7 @@ export function PricingPage() {
         <div className="mb-12">
           <h1 className="text-3xl font-bold mb-4 gradient-text text-center">Pricing</h1>
           <p className="text-muted-foreground text-center mb-8">Choose the plan that works for you</p>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {/* Free Plan */}
             <Card className="p-6">
@@ -448,68 +594,184 @@ export function PricingPage() {
         {/* Models Pricing Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6 text-center">Large Language Model (LLM) Pricing</h2>
-          
-          <div className="rounded-lg border bg-card overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[250px] md:w-[300px]">
-                    <div>
-                      <div>Model</div>
-                      <div className="text-xs text-muted-foreground font-normal mt-1 hidden md:block">
-                        Quantization • Context / Max output
-                      </div>
-                    </div>
-                  </TableHead>
-                  <TableHead className="text-center min-w-[80px]">$ / M in</TableHead>
-                  <TableHead className="text-center min-w-[80px]">$ / M out</TableHead>
-                  <TableHead className="text-center min-w-[80px]">Speed</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {models.map((model) => (
-                  <TableRow key={model.id}>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm">{model.id}</span>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 w-6 p-0 flex-shrink-0"
-                            onClick={() => copyModelId(model.id)}
-                          >
-                            {copiedModel === model.id ? (
-                              <Check className="h-3 w-3" />
-                            ) : (
-                              <Copy className="h-3 w-3" />
+
+          <div className="w-full">
+            <div className="flex items-center justify-between py-4">
+               <div className="flex items-center gap-4">
+                 <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                     <Button variant="outline" className="hover:bg-accent text-foreground">
+                       {providerFilter || "All Models"}
+                        <ChevronDown className="ml-px h-4 w-4" />
+                     </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="bg-neutral-950 text-white border-neutral-900">
+                    <DropdownMenuCheckboxItem
+                      checked={!providerFilter}
+                      onCheckedChange={(checked) => setProviderFilter(checked ? "" : providerFilter)}
+                    >
+                      All Models
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={providerFilter === "Free"}
+                      onCheckedChange={(checked) => setProviderFilter(checked ? "Free" : "")}
+                    >
+                      Free
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      checked={providerFilter === "Best Speed"}
+                      onCheckedChange={(checked) => setProviderFilter(checked ? "Best Speed" : "")}
+                    >
+                      Best Speed
+                    </DropdownMenuCheckboxItem>
+                    {uniqueProviders.map((provider) => (
+                      <DropdownMenuCheckboxItem
+                        key={provider}
+                        checked={providerFilter === provider}
+                        onCheckedChange={(checked) => setProviderFilter(checked ? provider : "")}
+                      >
+                        {provider}
+                      </DropdownMenuCheckboxItem>
+                     ))}
+                   </DropdownMenuContent>
+                 </DropdownMenu>
+                  <div className="relative max-w-full md:max-w-md mr-8">
+                   <Input
+                     placeholder="Filter models..."
+                     value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+                     onChange={(event) =>
+                       table.getColumn("id")?.setFilterValue(event.target.value)
+                     }
+                     className="pr-7"
+                   />
+                   <Button
+                     variant="ghost"
+                     className={`absolute right-2 top-1/2 -translate-y-1/2 !p-0 !w-6 !h-6 bg-transparent hover:bg-purple-500/10 hover:text-white transition-all duration-200 ${
+                       (table.getColumn("id")?.getFilterValue() as string) ? 'opacity-100' : 'opacity-0'
+                     }`}
+                     onClick={() => table.getColumn("id")?.setFilterValue("")}
+                   >
+                     <X className="h-4 w-4" />
+                   </Button>
+                 </div>
+               </div>
+               <div className="flex items-center gap-4">
+                 <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                     <Button variant="outline" className="hover:bg-accent text-foreground">
+                       {(sortMode === 'speed-fastest' || sortMode === 'speed-slowest') ? (
+                         <Zap className="mr-0.5 h-4 w-4" />
+                       ) : (sortMode === 'price-cheapest' || sortMode === 'price-expensive') ? (
+                         <DollarSign className="mr-0.5 h-4 w-4" />
+                       ) : (
+                         <ArrowUpDown className="mr-0.5 h-4 w-4" />
+                       )}
+                       {sortMode === 'default' ? 'Default' :
+                        sortMode === 'model-asc' ? 'A-Z' :
+                        sortMode === 'model-desc' ? 'Z-A' :
+                        sortMode === 'speed-fastest' ? 'Fastest' :
+                        sortMode === 'speed-slowest' ? 'Slowest' :
+                        sortMode === 'price-cheapest' ? 'Cheapest' :
+                        sortMode === 'price-expensive' ? 'Premium' : 'Sort'}
+                     </Button>
+                  </DropdownMenuTrigger>
+                   <DropdownMenuContent align="end" className="bg-neutral-950 text-white border-neutral-900">
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'default'}
+                       onCheckedChange={() => setSortMode('default')}
+                     >
+                       Default
+                     </DropdownMenuCheckboxItem>
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'model-asc'}
+                       onCheckedChange={() => setSortMode('model-asc')}
+                     >
+                       A-Z
+                     </DropdownMenuCheckboxItem>
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'model-desc'}
+                       onCheckedChange={() => setSortMode('model-desc')}
+                     >
+                       Z-A
+                     </DropdownMenuCheckboxItem>
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'speed-fastest'}
+                       onCheckedChange={() => setSortMode('speed-fastest')}
+                     >
+                       Fastest
+                     </DropdownMenuCheckboxItem>
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'speed-slowest'}
+                       onCheckedChange={() => setSortMode('speed-slowest')}
+                     >
+                       Slowest
+                     </DropdownMenuCheckboxItem>
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'price-cheapest'}
+                       onCheckedChange={() => setSortMode('price-cheapest')}
+                     >
+                       Cheapest
+                     </DropdownMenuCheckboxItem>
+                     <DropdownMenuCheckboxItem
+                       checked={sortMode === 'price-expensive'}
+                       onCheckedChange={() => setSortMode('price-expensive')}
+                     >
+                       Premium
+                     </DropdownMenuCheckboxItem>
+                   </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+            <div className="rounded-md border min-h-[500px] pb-32">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead key={header.id}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        )
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
                             )}
-                          </Button>
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          <div className="md:hidden">
-                            <span className="font-medium">Quant:</span> {model.quantization} • 
-                            <span className="font-medium"> Context:</span> {formatNumber(model.context_length)} / {formatNumber(model.max_completion_tokens)}
-                          </div>
-                          <div className="hidden md:block">
-                            {model.quantization} • {formatNumber(model.context_length)} / {formatNumber(model.max_completion_tokens)}
-                          </div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center font-mono text-sm">
-                      ${model.pricing.prompt.toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-center font-mono text-sm">
-                      ${model.pricing.completion.toFixed(2)}
-                    </TableCell>
-                    <TableCell className={`text-center font-mono text-sm ${getSpeedColor(model.speed)}`}>
-                      ~{model.speed} t/s
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        No results.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>
