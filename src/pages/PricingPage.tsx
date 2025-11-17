@@ -521,70 +521,92 @@ export function PricingPage() {
 
   return (
     <div className="px-8 pt-9 pb-0 h-full">
-      <div className="container mx-auto max-w-6xl">
+      <div className="w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden relative">
+        <div className="flex flex-col h-full">
+          <div className="flex-1 overflow-y-auto px-16 py-12 max-w-6xl mx-auto">
         {/* Plans Section */}
         <div className="mb-12">
           <h1 className="text-3xl font-bold mb-4 gradient-text text-center">Pricing</h1>
           <p className="text-muted-foreground text-center mb-8">Choose the plan that works for you</p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
             {/* Free Plan */}
-            <Card className="p-6">
-              <div className="flex justify-between items-start mb-4">
+            <Card className="p-4 flex flex-col bg-neutral-950">
+              <div className="flex justify-between items-start mb-2">
                 <div>
                   <h3 className="text-xl font-semibold">Free/Pay-as-you-go</h3>
-                  <p className="text-3xl font-bold mt-2">$0<span className="text-lg font-normal text-muted-foreground">/month</span></p>
+                  <p className="text-3xl font-bold mt-1">$0<span className="text-lg font-normal text-muted-foreground">/month</span></p>
                 </div>
               </div>
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-2 flex-grow">
                 <li className="flex items-center">• Pay only for usage</li>
                 <li className="flex items-center">• No recurring monthly charge</li>
               </ul>
+              <Button
+                className="w-full !hover:bg-purple-500/10 !transition-colors"
+                onClick={() => window.location.href = '/signup'}
+              >
+                Get Started
+              </Button>
             </Card>
 
             {/* Hobby Plan */}
-            <Card className="p-6 border-primary">
-              <div className="flex justify-between items-start mb-4">
+            <Card className="p-4 border-primary flex flex-col bg-neutral-950">
+              <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="text-xl font-semibold">Hobby</h3>
-                  <p className="text-3xl font-bold mt-2">$5<span className="text-lg font-normal text-muted-foreground">/month</span></p>
+                  <h3 className="text-xl font-semibold gradient-text">Hobby</h3>
+                  <p className="text-3xl font-bold mt-1">$5<span className="text-lg font-normal text-muted-foreground">/month</span></p>
                 </div>
               </div>
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-2 flex-grow">
                 <li className="flex items-center">• 250 daily requests</li>
                 <li className="flex items-center">• Access to all models</li>
               </ul>
-              {isLoggedIn && (
+              {isLoggedIn ? (
                 <Button
-                  className="w-full"
+                  className="w-full !hover:bg-purple-500/10 !transition-colors"
                   variant="outline"
                   onClick={() => showPlanModal('hobby')}
                 >
                   Purchase Hobby Plan
                 </Button>
+              ) : (
+                <Button
+                  className="w-full !hover:bg-purple-500/10 !transition-colors"
+                  onClick={() => window.location.href = '/signup'}
+                >
+                  Get Started
+                </Button>
               )}
             </Card>
 
             {/* Pro Plan */}
-            <Card className="p-6 border-primary">
-              <div className="flex justify-between items-start mb-4">
+            <Card className="p-4 border-primary flex flex-col bg-neutral-950">
+              <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="text-xl font-semibold">Pro</h3>
-                  <p className="text-3xl font-bold mt-2">$10<span className="text-lg font-normal text-muted-foreground">/month</span></p>
+                  <h3 className="text-xl font-semibold gradient-text">Pro</h3>
+                  <p className="text-3xl font-bold mt-1">$10<span className="text-lg font-normal text-muted-foreground">/month</span></p>
                 </div>
               </div>
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-2 flex-grow">
                 <li className="flex items-center">• All Hobby benefits</li>
                 <li className="flex items-center">• 1,000 daily requests</li>
                 <li className="flex items-center">• Priority Support</li>
               </ul>
-              {isLoggedIn && (
+              {isLoggedIn ? (
                 <Button
-                  className="w-full"
+                  className="w-full !hover:bg-purple-500/10 !transition-colors"
                   variant="outline"
                   onClick={() => showPlanModal('pro')}
                 >
                   Purchase Pro Plan
+                </Button>
+              ) : (
+                <Button
+                  className="w-full !hover:bg-purple-500/10 !transition-colors"
+                  onClick={() => window.location.href = '/signup'}
+                >
+                  Get Started
                 </Button>
               )}
             </Card>
@@ -774,6 +796,12 @@ export function PricingPage() {
             </div>
           </div>
         </div>
+          </div>
+
+        </div>
+
+        <div className="absolute inset-0 rounded-md animate-gradient-glow pointer-events-none"></div>
+
       </div>
 
       {/* Confirmation Modal */}
