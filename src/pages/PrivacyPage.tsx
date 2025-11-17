@@ -1,10 +1,10 @@
 export function PrivacyPage() {
   return (
     <div className="px-8 pt-9 pb-0 h-full">
-      <div className="container mx-auto max-w-4xl rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden relative">
+      <div className="w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden relative">
         <div className="flex flex-col h-full">
 
-          <div className="flex-1 overflow-y-auto px-16 py-12">
+          <div className="flex-1 overflow-y-auto px-16 py-12 max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold mb-8 gradient-text">Privacy Policy</h1>
           <div className="prose prose-invert max-w-none">
             <p className="text-sm text-muted-foreground mb-8">Last Updated: July 2025</p>
