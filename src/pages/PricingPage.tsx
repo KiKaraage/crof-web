@@ -1,14 +1,28 @@
-import { useState } from "react"
 import { Copy, Check } from "lucide-react"
+import { useState, useMemo } from "react"
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
+import type {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+} from "@tanstack/react-table"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "../components/ui/table"
 import { useAuth } from "../contexts/AuthContext"
 
