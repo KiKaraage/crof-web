@@ -314,7 +314,7 @@ const models: Model[] = [
 ]
 
 export function PricingPage() {
-  const { user } = useAuth()
+  const { isLoggedIn } = useAuth()
   const [copiedModel, setCopiedModel] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null)
   const [showModal, setShowModal] = useState(false)
@@ -385,9 +385,9 @@ export function PricingPage() {
                 <li className="flex items-center">• 250 daily requests</li>
                 <li className="flex items-center">• Access to all models</li>
               </ul>
-              {user && (
-                <Button 
-                  className="w-full" 
+              {isLoggedIn && (
+                <Button
+                  className="w-full"
                   variant="outline"
                   onClick={() => showPlanModal('hobby')}
                 >
@@ -409,9 +409,9 @@ export function PricingPage() {
                 <li className="flex items-center">• 1,000 daily requests</li>
                 <li className="flex items-center">• Priority Support</li>
               </ul>
-              {user && (
-                <Button 
-                  className="w-full" 
+              {isLoggedIn && (
+                <Button
+                  className="w-full"
                   variant="outline"
                   onClick={() => showPlanModal('pro')}
                 >
@@ -497,9 +497,9 @@ export function PricingPage() {
           <Card className="p-6 max-w-md w-full mx-4">
             <h2 className="text-xl font-semibold mb-4">Confirm Plan Change</h2>
             <p className="text-muted-foreground mb-6">
-              {selectedPlan === "free" 
+              {selectedPlan === "free"
                 ? "This will immediately remove all privileges of your current plan. Are you sure you want to do this?"
-                : `The ${selectedPlan?.charAt(0).toUpperCase() + selectedPlan?.slice(1)} plan subscription fee of $${selectedPlan === "hobby" ? "5" : "10"}/month will be deducted from your account credits. Are you sure you want to proceed with this plan change?`
+                : `The ${selectedPlan?.charAt(0).toUpperCase()}${selectedPlan?.slice(1)} plan subscription fee of $${selectedPlan === "hobby" ? "5" : "10"}/month will be deducted from your account credits. Are you sure you want to proceed with this plan change?`
               }
             </p>
             <div className="flex gap-3 justify-end">
