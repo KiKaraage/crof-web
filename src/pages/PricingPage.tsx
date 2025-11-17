@@ -30,16 +30,16 @@ const models: Model[] = [
     quantization: "fp4",
     context_length: 262144,
     max_completion_tokens: 262144,
-    pricing: { prompt: 0.00, completion: 0.00 },
-    speed: 89
+    pricing: { prompt: 0.55, completion: 2.20 },
+    speed: 247
   },
   {
     id: "kimi-k2-thinking-turbo",
     quantization: "fp4",
-    context_length: 131072,
-    max_completion_tokens: 131072,
-    pricing: { prompt: 1.00, completion: 2.25 },
-    speed: 46
+    context_length: 262144,
+    max_completion_tokens: 262144,
+    pricing: { prompt: 1.00, completion: 3.00 },
+    speed: 41
   },
   {
     id: "kimi-k2-0905",
@@ -55,7 +55,7 @@ const models: Model[] = [
     context_length: 131072,
     max_completion_tokens: 8192,
     pricing: { prompt: 0.35, completion: 1.00 },
-    speed: 963
+    speed: 951
   },
   {
     id: "glm-4.6-turbo",
@@ -63,7 +63,7 @@ const models: Model[] = [
     context_length: 202752,
     max_completion_tokens: 202752,
     pricing: { prompt: 0.50, completion: 2.25 },
-    speed: 19
+    speed: 26
   },
   {
     id: "minimax-m2",
@@ -71,7 +71,7 @@ const models: Model[] = [
     context_length: 196608,
     max_completion_tokens: 196608,
     pricing: { prompt: 0.00, completion: 0.00 },
-    speed: 89
+    speed: 96
   },
   {
     id: "deepseek-v3.1:free",
@@ -79,7 +79,7 @@ const models: Model[] = [
     context_length: 128000,
     max_completion_tokens: 128000,
     pricing: { prompt: 0.00, completion: 0.00 },
-    speed: 10
+    speed: 49
   },
   {
     id: "qwen3-coder:free",
@@ -87,7 +87,7 @@ const models: Model[] = [
     context_length: 256000,
     max_completion_tokens: 256000,
     pricing: { prompt: 0.00, completion: 0.00 },
-    speed: 93
+    speed: 125
   },
   {
     id: "kimi-k2-eco",
@@ -175,7 +175,7 @@ const models: Model[] = [
     context_length: 131072,
     max_completion_tokens: 8192,
     pricing: { prompt: 0.50, completion: 1.00 },
-    speed: 22
+    speed: 91
   },
   {
     id: "deepseek-r1-0528",
@@ -183,7 +183,7 @@ const models: Model[] = [
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: 0.25, completion: 0.25 },
-    speed: 33
+    speed: 35
   },
   {
     id: "deepseek-r1-0528-turbo",
@@ -215,7 +215,7 @@ const models: Model[] = [
     context_length: 131072,
     max_completion_tokens: 131072,
     pricing: { prompt: 0.10, completion: 0.30 },
-    speed: 40
+    speed: 48
   },
   {
     id: "qwen3-coder",
@@ -263,7 +263,7 @@ const models: Model[] = [
     context_length: 262144,
     max_completion_tokens: 16384,
     pricing: { prompt: 0.08, completion: 0.40 },
-    speed: 63
+    speed: 65
   },
   {
     id: "llama3.3-70b",
