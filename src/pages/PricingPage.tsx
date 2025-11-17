@@ -615,7 +615,7 @@ export function PricingPage() {
 
         {/* Models Pricing Section */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 text-center">Large Language Model (LLM) Pricing</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center gradient-text">Large Language Model (LLM) Pricing</h2>
 
           <div className="w-full">
             <div className="flex items-center justify-between py-4">
