@@ -39,7 +39,7 @@ for chunk in response:
         <div className="px-8 w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-visible relative">
         <div className="flex flex-col h-full">
 
-          <div className="flex-1 overflow-y-auto overflow-x-hidden px-16 py-12 w-full break-words">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-16 py-12 max-w-4xl mx-auto break-words">
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-primary">API/SDK</h2>
            <p className="mb-4 break-words">

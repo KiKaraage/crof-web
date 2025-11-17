@@ -130,7 +130,8 @@ export function StartupPage() {
     <div className="px-8 pt-9 pb-0 h-full">
         <div className="w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden relative">
         <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-y-auto px-16 py-12">
+            <div className="flex-1 overflow-y-auto px-16">
+            <div className="py-12 max-w-3xl mx-auto">
             <h1 className="text-3xl font-bold mb-8 gradient-text">Tell us about your startup</h1>
             
             <form onSubmit={handleSubmit} className="space-y-8 w-full">
@@ -235,6 +236,7 @@ export function StartupPage() {
                 </Button>
               </div>
             </form>
+            </div>
           </div>
         </div>
         <div className="absolute inset-0 rounded-md animate-gradient-glow pointer-events-none"></div>
