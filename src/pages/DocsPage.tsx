@@ -34,29 +34,33 @@ for chunk in response:
     if chunk.choices and chunk.choices[0].delta.content:
         print(chunk.choices[0].delta.content, end="", flush=True)`;
 
-  return (
-    <div className="px-8 pt-9 pb-0 h-full">
-       <div className="w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-visible relative">
+   return (
+    <div className="pt-9 pb-0 h-full relative">
+        <div className="px-8 w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-visible relative">
         <div className="flex flex-col h-full">
 
-          <div className="flex-1 overflow-y-auto px-16 py-12 max-w-4xl mx-auto break-words">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-16 py-12 w-full break-words">
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-primary">API/SDK</h2>
            <p className="mb-4 break-words">
             CrofAI supports the OpenAI SDK for LLM inference. Below will be a python example.
           </p>
 
-           <h3 className="text-xl font-medium mb-2">Python (No Streaming)</h3>
-            <pre className="bg-neutral-950 text-white p-4 rounded-md overflow-x-auto max-w-full whitespace-pre-wrap break-words mb-6 relative">
-             <CopyButton text={codeNoStreaming} />
-             <code>{codeNoStreaming}</code>
-           </pre>
+            <h3 className="text-xl font-medium mb-2">Python (No Streaming)</h3>
+             <pre className="bg-neutral-950 text-white p-4 rounded-md w-full mb-6 relative overflow-x-hidden">
+              <div className="overflow-x-auto">
+                <CopyButton text={codeNoStreaming} />
+                <code className="whitespace-pre px-4">{codeNoStreaming}</code>
+              </div>
+            </pre>
 
-           <h3 className="text-xl font-medium mb-2">Python (With Streaming)</h3>
-            <pre className="bg-neutral-950 text-white p-4 rounded-md overflow-x-auto max-w-full whitespace-pre-wrap break-words mb-6 relative">
-             <CopyButton text={codeStreaming} />
-             <code>{codeStreaming}</code>
-           </pre>
+            <h3 className="text-xl font-medium mb-2">Python (With Streaming)</h3>
+             <pre className="bg-neutral-950 text-white p-4 rounded-md w-full mb-6 relative overflow-x-hidden">
+              <div className="overflow-x-auto">
+                <CopyButton text={codeStreaming} />
+                <code className="whitespace-pre px-4">{codeStreaming}</code>
+              </div>
+            </pre>
         </section>
 
         <section className="mb-8">
@@ -83,9 +87,9 @@ for chunk in response:
           </p>
         </section>
       </div>
-      </div>
-      <div className="absolute inset-0 rounded-md animate-gradient-glow pointer-events-none"></div>
-    </div>
+       </div>
+        <div className="absolute inset-x-8 inset-y-0 rounded-md animate-gradient-glow pointer-events-none"></div>
+     </div>
     </div>
   );
 }
