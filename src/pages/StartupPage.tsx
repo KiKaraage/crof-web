@@ -105,8 +105,8 @@ export function StartupPage() {
   if (isSubmitted) {
     return (
       <div className="px-8 pt-9 pb-0 h-full">
-        <div className="container mx-auto max-w-4xl rounded-md h-[calc(100vh-8.5rem)] flex items-center justify-center relative">
-          <div className="text-center max-w-md">
+          <div className="w-full rounded-md h-[calc(100vh-8.5rem)] flex items-center justify-center relative">
+            <div className="text-center max-w-md mx-auto">
             <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -128,12 +128,12 @@ export function StartupPage() {
 
   return (
     <div className="px-8 pt-9 pb-0 h-full">
-      <div className="container mx-auto max-w-4xl rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden relative">
+        <div className="w-full rounded-md h-[calc(100vh-8.5rem)] flex flex-col overflow-hidden relative">
         <div className="flex flex-col h-full">
-          <div className="flex-1 overflow-y-auto px-16 py-12">
+            <div className="flex-1 overflow-y-auto px-16 py-12">
             <h1 className="text-3xl font-bold mb-8 gradient-text">Tell us about your startup</h1>
             
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-8 w-full">
               {errors.general && (
                 <div className="bg-destructive/10 border border-destructive/20 rounded-md p-4">
                   <FieldError errors={[{ message: errors.general[0] }]} />
@@ -141,24 +141,28 @@ export function StartupPage() {
               )}
               
               <FieldSet>
-                <FieldGroup>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Field data-invalid={!!errors.startup_name?.length}>
-                      <FieldLabel htmlFor="startup_name">Startup Name</FieldLabel>
+                <FieldGroup className="space-y-0 w-full">
+                  <Field data-invalid={!!errors.startup_name?.length}>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                      <FieldLabel htmlFor="startup_name" className="sm:flex-shrink-0 sm:w-32 sm:text-right">Startup Name</FieldLabel>
                       <Input
                         id="startup_name"
+                        className="sm:flex-1 w-full"
                         value={formData.startup_name}
                         onChange={(e) => handleInputChange("startup_name", e.target.value)}
                         placeholder="CrofAI"
                         required
                         aria-invalid={!!errors.startup_name?.length}
                       />
-                      <FieldError errors={errors.startup_name} />
-                    </Field>
-                    <Field data-invalid={!!errors.website?.length}>
-                      <FieldLabel htmlFor="website">Company Website</FieldLabel>
+                    </div>
+                    <FieldError errors={errors.startup_name?.map(err => ({ message: err }))} />
+                  </Field>
+                  <Field data-invalid={!!errors.website?.length}>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                      <FieldLabel htmlFor="website" className="sm:flex-shrink-0 sm:w-32 sm:text-right">Company Website</FieldLabel>
                       <Input
                         id="website"
+                        className="sm:flex-1 w-full"
                         type="url"
                         value={formData.website}
                         onChange={(e) => handleInputChange("website", e.target.value)}
@@ -166,23 +170,26 @@ export function StartupPage() {
                         required
                         aria-invalid={!!errors.website?.length}
                       />
-                      <FieldError errors={errors.website} />
-                    </Field>
-                  </div>
-                  
-                  <Field data-invalid={!!errors.contact_email?.length}>
-                    <FieldLabel htmlFor="contact_email">Contact Email</FieldLabel>
-                    <Input
-                      id="contact_email"
-                      type="email"
-                      value={formData.contact_email}
-                      onChange={(e) => handleInputChange("contact_email", e.target.value)}
-                      placeholder="you@company.com"
-                      required
-                      aria-invalid={!!errors.contact_email?.length}
-                    />
-                    <FieldError errors={errors.contact_email} />
+                    </div>
+                    <FieldError errors={errors.website?.map(err => ({ message: err }))} />
                   </Field>
+                  <Field data-invalid={!!errors.contact_email?.length}>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                      <FieldLabel htmlFor="contact_email" className="sm:flex-shrink-0 sm:w-32 sm:text-right">Contact Email</FieldLabel>
+                      <Input
+                        id="contact_email"
+                        className="sm:flex-1 w-full"
+                        type="email"
+                        value={formData.contact_email}
+                        onChange={(e) => handleInputChange("contact_email", e.target.value)}
+                        placeholder="you@company.com"
+                        required
+                        aria-invalid={!!errors.contact_email?.length}
+                      />
+                    </div>
+                    <FieldError errors={errors.contact_email?.map(err => ({ message: err }))} />
+                  </Field>
+
                   
                   <Field data-invalid={!!errors.description?.length}>
                     <FieldLabel htmlFor="description">
@@ -200,7 +207,7 @@ export function StartupPage() {
                     <FieldDescription>
                       Help us understand your business model and target audience.
                     </FieldDescription>
-                    <FieldError errors={errors.description} />
+                    <FieldError errors={errors.description?.map(err => ({ message: err }))} />
                   </Field>
                   
                   <Field data-invalid={!!errors.use_case?.length}>
@@ -217,7 +224,7 @@ export function StartupPage() {
                     <FieldDescription>
                       Tell us about your technical requirements and expected usage.
                     </FieldDescription>
-                    <FieldError errors={errors.use_case} />
+                    <FieldError errors={errors.use_case?.map(err => ({ message: err }))} />
                   </Field>
                 </FieldGroup>
               </FieldSet>
