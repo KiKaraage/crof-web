@@ -350,6 +350,29 @@ export function PricingPage() {
     return num.toLocaleString()
   }
 
+  const getProviderName = (modelId: string) => {
+    const provider = modelId.split('-')[0]
+    if (!provider) return modelId
+
+    // Special case: normalize llama variations to "Llama"
+    if (provider.toLowerCase().startsWith('llama')) {
+      return 'Llama'
+    }
+
+    // Special cases that should not be capitalized
+    if (provider.toLowerCase().startsWith('glm') ||
+        provider.toLowerCase().startsWith('gpt') ||
+        provider.toLowerCase().startsWith('qwen')) {
+      return provider.toUpperCase().replace(/\d+$/, '') // Remove trailing numbers
+    }
+    // Capitalize first letter for others
+    return provider.charAt(0).toUpperCase() + provider.slice(1)
+  }
+
+  const uniqueProviders = useMemo(() => {
+    const providers = models.map(model => getProviderName(model.id))
+    return [...new Set(providers)].sort()
+  }, [models])
   return (
     <div className="px-8 pt-9 pb-0 h-full">
       <div className="container mx-auto max-w-6xl">
