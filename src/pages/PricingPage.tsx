@@ -16,6 +16,7 @@ import type {
 } from "@tanstack/react-table"
 import { Button } from "../components/ui/button"
 import { Card } from "../components/ui/card"
+import { PlanCards } from "../components/PlanCards"
 import { Checkbox } from "../components/ui/checkbox"
 import {
   DropdownMenu,
@@ -529,88 +530,7 @@ export function PricingPage() {
           <h1 className="text-3xl font-bold mb-4 gradient-text text-center">Pricing</h1>
           <p className="text-muted-foreground text-center mb-8">Choose the plan that works for you</p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-            {/* Free Plan */}
-            <Card className="p-4 flex flex-col bg-neutral-950">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="text-xl font-semibold">Free/Pay-as-you-go</h3>
-                  <p className="text-3xl font-bold mt-1">$0<span className="text-lg font-normal text-muted-foreground">/month</span></p>
-                </div>
-              </div>
-              <ul className="space-y-2 mb-2 flex-grow">
-                <li className="flex items-center">• Pay only for usage</li>
-                <li className="flex items-center">• No recurring monthly charge</li>
-              </ul>
-              <Button
-                className="w-full !hover:bg-purple-500/10 !transition-colors"
-                onClick={() => window.location.href = '/signup'}
-              >
-                Get Started
-              </Button>
-            </Card>
-
-            {/* Hobby Plan */}
-            <Card className="p-4 border-primary flex flex-col bg-neutral-950">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="text-xl font-semibold gradient-text">Hobby</h3>
-                  <p className="text-3xl font-bold mt-1">$5<span className="text-lg font-normal text-muted-foreground">/month</span></p>
-                </div>
-              </div>
-              <ul className="space-y-2 mb-2 flex-grow">
-                <li className="flex items-center">• 250 daily requests</li>
-                <li className="flex items-center">• Access to all models</li>
-              </ul>
-              {isLoggedIn ? (
-                <Button
-                  className="w-full !hover:bg-purple-500/10 !transition-colors"
-                  variant="outline"
-                  onClick={() => showPlanModal('hobby')}
-                >
-                  Purchase Hobby Plan
-                </Button>
-              ) : (
-                <Button
-                  className="w-full !hover:bg-purple-500/10 !transition-colors"
-                  onClick={() => window.location.href = '/signup'}
-                >
-                  Get Started
-                </Button>
-              )}
-            </Card>
-
-            {/* Pro Plan */}
-            <Card className="p-4 border-primary flex flex-col bg-neutral-950">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="text-xl font-semibold gradient-text">Pro</h3>
-                  <p className="text-3xl font-bold mt-1">$10<span className="text-lg font-normal text-muted-foreground">/month</span></p>
-                </div>
-              </div>
-              <ul className="space-y-2 mb-2 flex-grow">
-                <li className="flex items-center">• All Hobby benefits</li>
-                <li className="flex items-center">• 1,000 daily requests</li>
-                <li className="flex items-center">• Priority Support</li>
-              </ul>
-              {isLoggedIn ? (
-                <Button
-                  className="w-full !hover:bg-purple-500/10 !transition-colors"
-                  variant="outline"
-                  onClick={() => showPlanModal('pro')}
-                >
-                  Purchase Pro Plan
-                </Button>
-              ) : (
-                <Button
-                  className="w-full !hover:bg-purple-500/10 !transition-colors"
-                  onClick={() => window.location.href = '/signup'}
-                >
-                  Get Started
-                </Button>
-              )}
-            </Card>
-          </div>
+          <PlanCards onPlanSelect={showPlanModal} />
         </div>
 
         {/* Models Pricing Section */}
